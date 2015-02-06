@@ -25,15 +25,16 @@ def wsgi_app(environ, start_response):
     path = environ.get('PATH_INFO', None)
     content_length = environ.get('CONTENT_LENGTH', '')
     content_length = int(content_length) if content_length != '' else 0
+#    post_content = environ.get('wsgi.input').read(content_length) if content_length != 0 else None
     print(type(content_length), content_length)
-    print(environ.get('wsgi.input').read(content_length))
+#    print(post_content)
     print(request_method, path, queries)
 
-
     form = None
-    if request_method == 'POST':
-        form = cgi.FieldStorage(environ.get('wsgi.input').read(content_length))
-        print(form) 
+    if request_method == 'POST' and content_length != 0:
+        form = cgi.FieldStorage(fp=environ.get('wsgi.input'), environ=environ)
+        post_data = {k: form.getvalue(k) for k in form.keys()}
+        print(post_data)
 
     if path in URLS:
         status = HTTP[200]
