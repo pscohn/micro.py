@@ -6,14 +6,11 @@ def hello(name=None):
     return 'Hello, %s' % name 
 
 def home():
-    form = '<form name="firstform" method="post" action="/result">'
-    form += '<input type="text" name="name" />'
-    form += '<input type="submit" name="submit" value="Submit" />'
-    form += '</form>'
-    return form
+    return micro.render('templates/form.html', {'name': 'name'})
 
-def result(name):
-    return name
+
+def result():
+    return 'result'
 
 def paul():
     return 'paul\'s homepage'

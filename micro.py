@@ -1,13 +1,30 @@
 #!/usr/bin/env python3
+import os
+import cgi
+
+from jinja2 import Environment, PackageLoader
+
 from urls import URLS
 
-import cgi
 
 HTTP = {
     200: '200 OK',
     404: '404 NOT FOUND',
 }
 
+
+
+def get(func):
+    pass
+
+def post(func):
+    pass
+
+packagedir = os.getcwd().split('/')[-1]
+env = Environment(loader=PackageLoader('urls', ''))
+def render(temp, context={}):
+    template = env.get_template(temp)
+    return template.render(**context)
 
 def wsgi_app(environ, start_response):
     print('--------------------')
