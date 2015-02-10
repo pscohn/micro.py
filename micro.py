@@ -4,7 +4,8 @@ import re
 import cgi
 
 from jinja2 import Environment, PackageLoader, Markup
-
+POST = {}
+GET = {}
 
 HTTP = {
     200: '200 OK',
@@ -13,12 +14,13 @@ HTTP = {
 
 
 
-def get(func):
-    pass
+def get(view):
+    GET[view.__name__] = view
+    return view
 
-def post(func):
-    pass
-
+def post(view):
+    POST[view.__name__] = view
+    return view
 
 def static(filename):
     return Markup(loader.get_source(env, filename)[0])
@@ -71,9 +73,18 @@ def wsgi_app(environ, start_response):
     status = HTTP[404]
     response = [bytes(status, encoding='utf-8')]
 
+    if request_method == 'POST':
+        current_views = POST
+        data = post_data
+    elif request_method == 'GET':
+        current_views = GET
+        data = queries
+    print('current views:', current_views)
+
     if path in router.urls:
         status = HTTP[200]
-        response = router.urls[path](**queries)
+        response = current_views[router.urls[path].__name__](data)
+        print('calling %s' % current_views[router.urls[path].__name__])
         response = [bytes(response, encoding='utf-8')]
     else:
         #TODO improve this
@@ -85,7 +96,10 @@ def wsgi_app(environ, start_response):
             if match:
                 print('match at %s with regex %s' % (path, str(regex)))
                 status = HTTP[200]
-                response = router.urls[k](*list(match.groups()))
+                arguments = {d: match.group(d) for d in match.groupdict() if match.group(d) is not None}
+                print(arguments)
+                print('calling %s' % current_views[router.urls[k].__name__])
+                response = current_views[router.urls[k].__name__](data,**arguments)
                 response = [bytes(response, encoding='utf-8')]
                 break
 

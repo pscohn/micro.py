@@ -1,19 +1,17 @@
 #!/usr/bin/env python3
 from micro import render, get, post, run_server
 from models import User, Filter, FilterItem, Entry
-from urls import *
 
-def hello(name=None):
-    name = name if name is not None else 'Asshole'
+def hello(name='Asshole'):
     return 'Hello, %s' % name 
 
 @get
-def home():
+def home(request):
     return render('more-templates/form.html', {'name': 'name'})
 
 @post
-def home():
-    return render('hello')
+def home(request):
+    return render(request[name])
 
 def result():
     return 'result'
@@ -60,11 +58,29 @@ def make_filter(queries, page):
 #    pager = Paginator()
     return render('templates/home.html', {'blots_all': articles, 'filter_keywords':', '.join(queries), 'paginator':paginator})
 
-def game(page=1):
+@get
+def game():
     return make_filter(['vr','oculus', 'virtual reality'], int(page))
 
 def elon(page=1):
     return make_filter(['elon musk'], int(page))
+
+
+from micro import router
+
+URLS = {
+    '/': home,
+    '/paul/': paul,
+    '/paul/(?P<page>\d+?)/?$': paul,
+    '/hello/?(?P<name>\w+)?/?': hello,
+    '/result': result,
+    '/vr/?$': game,
+    '/vr/(?P<page>\d+?)/?$': game,
+    '/elon/?': elon,
+    '/elon/(?P<page>\d+)/?': elon,
+}
+
+router.add_routes(URLS)
 
 if __name__ == '__main__':
     run_server()
