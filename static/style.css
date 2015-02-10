@@ -1,0 +1,238 @@
+/**
+ * Eric Meyer's Reset CSS v2.0 (http://meyerweb.com/eric/tools/css/reset/)
+ * http://cssreset.com
+ */
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* colors */
+/*#303030; /*16a085; /*   #347A3F; */
+body {
+  background-color: #f7f7f7;
+  font-family: Candara, Calibri, sans-serif;
+}
+h1 {
+  font-size: 3em;
+  display: inline;
+}
+h2 {
+  font-size: 2em;
+  margin-bottom: 15px;
+}
+h3 {
+  font-size: 1.1em;
+  margin-bottom: 0px;
+}
+p {
+  margin-top: 5px;
+  margin-bottom: 20px;
+  line-height: 24px;
+}
+strong {
+  font-weight: bold;
+}
+li {
+  list-style: none;
+  font-size: 18px;
+}
+a,
+a:visited {
+  color: #4f7e79;
+  text-decoration: none;
+}
+a:hover,
+a:visited:hover {
+  text-decoration: underline;
+}
+.navigation {
+  display: block;
+  background-color: #16a085;
+  margin-bottom: 20px;
+  height: 50px;
+}
+.navigation h1 {
+  font-size: 32px;
+}
+.navigation ul {
+  display: inline;
+}
+.navigation li {
+  display: inline;
+  color: #16a085;
+  margin-right: 10px;
+}
+.navigation a,
+.navigation a:visited {
+  color: #fff;
+  padding-left: 6px;
+  padding-right: 6px;
+}
+.navigation a:hover,
+.navigation a:visited:hover {
+  color: #eeeeee;
+  text-decoration: none;
+}
+.nav-content {
+  max-width: 980px;
+  margin: auto;
+  line-height: 50px;
+}
+.icons {
+  float: right;
+  padding: 5px;
+}
+div.main {
+  max-width: 980px;
+  margin: 0 auto;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 60px;
+}
+.title {
+  font-size: 20px;
+  font-weight: bold;
+}
+.blot {
+  background-color: #ffffff;
+  padding-top: 20px;
+  box-shadow: 1px 1px 1px 1px #d3d3de;
+  margin-bottom: 20px;
+}
+.blot-content {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 15px;
+}
+div.source,
+div.source a {
+  font-size: 0.9em;
+  color: #858585;
+  font-style: italic;
+}
+span.datetime {
+  font-weight: bold;
+}
+.blot-bar {
+  padding-left: 20px;
+}
+.children {
+  display: inline-block;
+  padding-top: 5px;
+}
+.read {
+  overflow: hidden;
+  height: 30px;
+}
+.read-link {
+  background-color: #16a085;
+  float: right;
+  height: 100%;
+  width: 100px;
+  text-align: center;
+  color: #ffffff;
+  padding: 5px;
+}
+.read-link:hover {
+  color: #eeeeee;
+}
+.pagination a {
+  padding: 5px;
+  text-align: center;
+}
+.pagination a:hover {
+  text-decoration: none;
+}
+.left-link {
+  float: left;
+}
+.current {
+  margin: 0 auto;
+}
+.right-link {
+  float: right;
+}

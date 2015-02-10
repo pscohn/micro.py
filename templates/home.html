@@ -1,0 +1,47 @@
+{% include "templates/header.html" %}
+
+<div class="main">
+<h2>Latest News{{ header_title }}</h2>
+{% if blots_all %}
+  {% for blot in blots_all %}
+  <div class="blot"><div class="blot-content"><div class="title"><h3><a href="{{ blot.link }}" target="_blank">{{ blot.title }}</a></h3></div>
+  <div class="source">({{ blot.author }}, <a href="http://vrblotter.com/{{ blot.get_source() }}">{{ blot.get_source() }}</a>)</div><br />
+  <div class="excerpt"><span class="datetime">{{ blot.created.strftime('%m-%d-%Y - %I:%M %p') }}</span> {{ blot.content }}
+</div></div>
+<div class="blot-bar"><div class="read"><div class="children">
+{#
+    {% for child in blot.children  %}
+            {% if forloop.first %}<strong>More sources: </strong>{% endif %} 
+            <a href="{{ child.url }}" target="_blank">{{ child.source }}</a>{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+#}
+</div>
+<a href="{{ blot.link }}" target="_blank"><span class="read-link">Read more</span></a></div></div>
+    </div>
+  {% endfor %}
+
+{% else %}
+Nothing yet
+{% endif %}
+<div class="pagination">
+    {% if paginator.has_previous %}
+  <span class="left-link">
+    <a href="/vr/{{ paginator.previous_page_number }}">&#8592; newer posts</a>
+  </span>
+    {% endif %}
+{#
+<!--
+    <span class="current">
+      Page {{ blots_all.number }} of {{ blots_all.paginator.num_pages }}
+    </span>
+-->
+#}
+    {% if paginator.has_next %}
+  <span class="right-link">
+    <a href="/vr/{{ paginator.next_page_number }}">older posts &#8594;</a>
+  </span>
+    {% endif %}
+</div>
+</div>
+
+{% include "templates/footer.html" %}
