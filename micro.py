@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import re
 import cgi
 
 from jinja2 import Environment, PackageLoader
@@ -14,21 +15,25 @@ HTTP = {
 
 
 
-def get(func):
+def get():
     pass
 
-def post(func):
+def post():
     pass
 
 packagedir = os.getcwd().split('/')[-1]
 env = Environment(loader=PackageLoader('urls', ''))
 def render(temp, context={}):
-    template = env.get_template(temp)
-    return template.render(**context)
+    if temp.endswith('.html'):
+        template = env.get_template(temp)
+        return template.render(**context)
+    else:
+        return temp
+
 
 def wsgi_app(environ, start_response):
-    print('--------------------')
-    print('\n'.join(['%s: %s' % (k, v) for k, v in environ.items()]))
+#    print('--------------------')
+#    print('\n'.join(['%s: %s' % (k, v) for k, v in environ.items()]))
 
     query = environ.get('QUERY_STRING', None)
     query_list = query.split('&') if query != '' else None
@@ -53,13 +58,26 @@ def wsgi_app(environ, start_response):
         post_data = {k: form.getvalue(k) for k in form.keys()}
         print(post_data)
 
+    status = HTTP[404]
+    response = [bytes(status, encoding='utf-8')]
+
     if path in URLS:
         status = HTTP[200]
         response = URLS[path](**queries)
         response = [bytes(response, encoding='utf-8')]
     else:
-        status = HTTP[404]
-        response = [bytes(status, encoding='utf-8')]
+        #TODO improve this
+        for k, v in URLS.items():
+            if '?' not in k:
+                continue
+            regex = re.compile(k)
+            match = re.match(regex, path)
+            if match:
+                print('match at %s with regex %s' % (path, str(regex)))
+                status = HTTP[200]
+                response = URLS[k](*list(match.groups()))
+                response = [bytes(response, encoding='utf-8')]
+                break
 
     headers = [('Content-type', 'text/html; charset=utf-8')] 
     start_response(status, headers)
