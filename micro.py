@@ -3,9 +3,7 @@ import os
 import re
 import cgi
 
-from jinja2 import Environment, PackageLoader
-
-from urls import URLS
+from jinja2 import Environment, PackageLoader, Markup
 
 
 HTTP = {
@@ -15,14 +13,20 @@ HTTP = {
 
 
 
-def get():
+def get(func):
     pass
 
-def post():
+def post(func):
     pass
+
+
+def static(filename):
+    return Markup(loader.get_source(env, filename)[0])
 
 packagedir = os.getcwd().split('/')[-1]
-env = Environment(loader=PackageLoader('urls', ''))
+loader = PackageLoader('__init__', '')
+env = Environment(loader=loader)
+env.globals['static'] = static
 def render(temp, context={}):
     if temp.endswith('.html'):
         template = env.get_template(temp)
@@ -30,7 +34,13 @@ def render(temp, context={}):
     else:
         return temp
 
+class Router:
+    def __init__(self):
+        self.urls = {}
+    def add_routes(self, routes):
+        self.urls.update(routes)
 
+router = Router()
 def wsgi_app(environ, start_response):
 #    print('--------------------')
 #    print('\n'.join(['%s: %s' % (k, v) for k, v in environ.items()]))
@@ -61,13 +71,13 @@ def wsgi_app(environ, start_response):
     status = HTTP[404]
     response = [bytes(status, encoding='utf-8')]
 
-    if path in URLS:
+    if path in router.urls:
         status = HTTP[200]
-        response = URLS[path](**queries)
+        response = router.urls[path](**queries)
         response = [bytes(response, encoding='utf-8')]
     else:
         #TODO improve this
-        for k, v in URLS.items():
+        for k, v in router.urls.items():
             if '?' not in k:
                 continue
             regex = re.compile(k)
@@ -75,7 +85,7 @@ def wsgi_app(environ, start_response):
             if match:
                 print('match at %s with regex %s' % (path, str(regex)))
                 status = HTTP[200]
-                response = URLS[k](*list(match.groups()))
+                response = router.urls[k](*list(match.groups()))
                 response = [bytes(response, encoding='utf-8')]
                 break
 
